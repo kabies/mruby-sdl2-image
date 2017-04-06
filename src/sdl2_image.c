@@ -13,6 +13,9 @@ mrb_sdl2_surface_image_load(mrb_state *mrb, mrb_value self)
   mrb_value file;
   mrb_get_args(mrb, "S", &file);
   result = IMG_Load(RSTRING_PTR(file));
+  if (NULL == surface) {
+    mruby_sdl2_raise_error(mrb);
+  }
   return mrb_sdl2_video_surface(mrb, result, true);
 }
 
@@ -47,7 +50,7 @@ mrb_sdl2_image_renderer_load(mrb_state *mrb, mrb_value self)
   texture = IMG_LoadTexture(renderer, RSTRING_PTR(file));
   if (texture == NULL)
     mruby_sdl2_raise_error(mrb);
-    
+
   return mrb_sdl2_video_texture(mrb, texture);
 }
 
@@ -89,7 +92,7 @@ static mrb_value
 mrb_sdl2_surface_image_init(mrb_state *mrb, mrb_value self) {
   mrb_int flags;
   mrb_get_args(mrb, "i", &flags);
-  
+
   return mrb_fixnum_value(IMG_Init(flags));
 }
 
@@ -100,15 +103,15 @@ void mrb_mruby_sdl2_image_gem_init(mrb_state *mrb) {
   struct RClass *mod_Video;
   struct RClass *class_RWops;
   struct RClass *mod_Image;
-  
+
   mod_Video      = mrb_module_get_under   (mrb, mod_SDL2,  "Video");
   class_Renderer = mrb_class_get_under    (mrb, mod_Video, "Renderer");
   class_Surface  = mrb_class_get_under    (mrb, mod_Video, "Surface");
   class_RWops    = mrb_class_get_under    (mrb, mod_SDL2,  "RWops");
   mod_Image      = mrb_define_module_under(mrb, mod_SDL2,  "Image");
-  
+
   mrb_define_module_function(mrb, mod_Image, "init", mrb_sdl2_surface_image_init, MRB_ARGS_REQ(1));
-  
+
   mrb_define_class_method(mrb, class_Surface, "load",    mrb_sdl2_surface_image_load,    MRB_ARGS_REQ(1));
   mrb_define_class_method(mrb, class_Surface, "load_RW", mrb_sdl2_surface_image_load_rw, MRB_ARGS_REQ(1) | MRB_ARGS_REQ(2));
 
