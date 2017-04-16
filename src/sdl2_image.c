@@ -13,7 +13,7 @@ mrb_sdl2_surface_image_load(mrb_state *mrb, mrb_value self)
   mrb_value file;
   mrb_get_args(mrb, "S", &file);
   result = IMG_Load(RSTRING_PTR(file));
-  if (NULL == surface) {
+  if (NULL == result) {
     mruby_sdl2_raise_error(mrb);
   }
   return mrb_sdl2_video_surface(mrb, result, true);
