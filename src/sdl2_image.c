@@ -4,7 +4,7 @@
 #include "sdl2_surface.h"
 #include "sdl2_render.h"
 #include "sdl2_rwops.h"
-#include <SDL2/SDL_image.h>
+#include <SDL_image.h>
 
 static mrb_value
 mrb_sdl2_surface_image_load(mrb_state *mrb, mrb_value self)
