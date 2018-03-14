@@ -1,6 +1,8 @@
 #include "sdl2_image.h"
+#include "mruby.h"
 #include "mruby/value.h"
 #include "mruby/string.h"
+#include "sdl2.h"
 #include "sdl2_surface.h"
 #include "sdl2_render.h"
 #include "sdl2_rwops.h"
