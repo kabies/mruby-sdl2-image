@@ -75,6 +75,19 @@ mrb_sdl2_image_renderer_load_rw(mrb_state *mrb, mrb_value self)
   return mrb_sdl2_video_texture(mrb, IMG_LoadTexture_RW(renderer, rwops, freesrc));
 }
 
+static mrb_value
+mrb_sdl2_surface_image_save(mrb_state *mrb, mrb_value self)
+{
+  mrb_value filename;
+  SDL_Surface *surface;
+  int argc = mrb_get_args(mrb, "S", &filename);
+
+  surface = mrb_sdl2_video_surface_get_ptr(mrb, self);
+  IMG_SavePNG(surface, mrb_str_to_cstr(mrb,filename));
+
+  return self;
+}
+
 static mrb_value mrb_sdl2_image_isICO (mrb_state *mrb, mrb_value self) { return (IMG_isICO (mrb_sdl2_rwops_get_ptr(mrb, self)) == 0) ? mrb_false_value() : mrb_true_value(); }
 static mrb_value mrb_sdl2_image_isCUR (mrb_state *mrb, mrb_value self) { return (IMG_isCUR (mrb_sdl2_rwops_get_ptr(mrb, self)) == 0) ? mrb_false_value() : mrb_true_value(); }
 static mrb_value mrb_sdl2_image_isBMP (mrb_state *mrb, mrb_value self) { return (IMG_isBMP (mrb_sdl2_rwops_get_ptr(mrb, self)) == 0) ? mrb_false_value() : mrb_true_value(); }
@@ -116,6 +129,7 @@ void mrb_mruby_sdl2_image_gem_init(mrb_state *mrb) {
 
   mrb_define_class_method(mrb, class_Surface, "load",    mrb_sdl2_surface_image_load,    MRB_ARGS_REQ(1));
   mrb_define_class_method(mrb, class_Surface, "load_RW", mrb_sdl2_surface_image_load_rw, MRB_ARGS_REQ(1) | MRB_ARGS_REQ(2));
+  mrb_define_method(mrb, class_Surface, "save",    mrb_sdl2_surface_image_save,    MRB_ARGS_REQ(1));
 
   mrb_define_method(mrb, class_Renderer, "load",    mrb_sdl2_image_renderer_load,    MRB_ARGS_REQ(1));
   mrb_define_method(mrb, class_Renderer, "load_rw", mrb_sdl2_image_renderer_load_rw, MRB_ARGS_REQ(1) | MRB_ARGS_REQ(2));
